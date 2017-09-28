@@ -1,7 +1,0 @@
-com/inventory/utils/StockException.class
-com/inventory/services/BusinessRules.class
-com/inventory/services/StockRepository.class
-com/inventory/exceptions/StocksException.class
-com/inventory/services/StockServices.class
-com/inventory/utils/StockServiceValidator.class
-com/inventory/services/Stock.class
