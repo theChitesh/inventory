@@ -28,3 +28,10 @@ my-env-config.yml
 **/*.DS_Store
 
 **/Dockerfile
+
+**/.idea
+**./.setting
+**/.classpath
+**/.gitignore.swp
+**/.project
+**/InventoryManagement.iml
