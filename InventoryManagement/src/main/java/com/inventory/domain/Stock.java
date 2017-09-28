@@ -1,4 +1,4 @@
-package com.inventory.services;
+package com.inventory.domain;
 
 import java.util.Date;
 

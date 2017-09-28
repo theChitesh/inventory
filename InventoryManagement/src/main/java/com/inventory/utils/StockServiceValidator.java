@@ -2,7 +2,7 @@ package com.inventory.utils;
 
 import org.springframework.stereotype.Service;
 
-import com.inventory.services.Stock;
+import com.inventory.domain.Stock;
 
 @Service
 public class StockServiceValidator {
@@ -17,7 +17,7 @@ public class StockServiceValidator {
 		
 		if(availableStock.getName().equals(newStock.getName())) {
 			System.out.println("Throw error");
-			throw new StockException();
+			throw new StockException("error");
 		}
 		
 		
