@@ -30,11 +30,10 @@ public class Stock {
 	private Integer quantity;
 
 
-	private boolean isPromotionActive;
+	private Boolean activatePromotion;
 
 	//@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "UTC")
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM", timezone = "UTC")
 	private Date entryDate;
 	
 	private String entryBy;
@@ -44,6 +43,14 @@ public class Stock {
 
 	private String updatedBy;
 
+	private Integer amountPerDay;
+	
+	private Boolean orderAdditionalStock;
+	
+	private Integer daysInInventory;
+	
+	private Integer inventoryCost;
+	
 
 	public int getId() {
 		return id;
@@ -69,15 +76,7 @@ public class Stock {
 		this.quantity = quantity;
 	}
 
-	
-
-	public boolean isPromotionActive() {
-		return isPromotionActive;
-	}
-
-	public void setPromotionActive(boolean isPromotionActive) {
-		this.isPromotionActive = isPromotionActive;
-	}
+		
 
 	public Date getEntryDate() {
 		return entryDate;
@@ -109,6 +108,46 @@ public class Stock {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Boolean getActivatePromotion() {
+		return activatePromotion;
+	}
+
+	public void setActivatePromotion(Boolean activatePromotion) {
+		this.activatePromotion = activatePromotion;
+	}
+
+	public Integer getAmountPerDay() {
+		return amountPerDay;
+	}
+
+	public void setAmountPerDay(Integer amountPerDay) {
+		this.amountPerDay = amountPerDay;
+	}
+
+	public Boolean getOrderAdditionalStock() {
+		return orderAdditionalStock;
+	}
+
+	public void setOrderAdditionalStock(Boolean orderAdditionalStock) {
+		this.orderAdditionalStock = orderAdditionalStock;
+	}
+
+	public Integer getDaysInInventory() {
+		return daysInInventory;
+	}
+
+	public void setDaysInInventory(Integer daysInInventory) {
+		this.daysInInventory = daysInInventory;
+	}
+
+	public Integer getInventoryCost() {
+		return inventoryCost;
+	}
+
+	public void setInventoryCost(Integer inventoryCost) {
+		this.inventoryCost = inventoryCost;
 	}
 
 	
