@@ -80,12 +80,12 @@ public class InventoryManagementRestServices {
 		
 		System.out.println("inside update "+stock.getName());
 		
-		//try {
+		try {
 			stockServices.updateStock(Integer.parseInt(id),stock);
-		/*} catch (StockException e) {
+		} catch (StockException e) {
 			System.out.println("in excpeiotn");
 			throw new WebServiceException(e);
-		}*/
+		}
 //		serviceValidator.validateForUpdate(stock);
 		return ResponseEntity.noContent().build();
 	}
