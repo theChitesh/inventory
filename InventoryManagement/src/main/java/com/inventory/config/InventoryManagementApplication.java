@@ -12,10 +12,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("com.inventory.domain")
 public class InventoryManagementApplication {
 
-  public static void main(String[] args) {
+	/**
+	 * Main Application class to start the boot application for Inventory Management
+	 * @param args
+	 */
+	public static void main(String[] args) {
 
-    SpringApplication.run(InventoryManagementApplication.class, args);
+		SpringApplication.run(InventoryManagementApplication.class, args);
 
-  }
+	}
 
 }

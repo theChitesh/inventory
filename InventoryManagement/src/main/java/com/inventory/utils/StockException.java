@@ -1,5 +1,10 @@
 package com.inventory.utils;
 
+/**
+ * Exception Class needed for handling application exception
+ * @author chitesh
+ *
+ */
 public class StockException extends RuntimeException {
 
   public StockException(final String errorMessage) {

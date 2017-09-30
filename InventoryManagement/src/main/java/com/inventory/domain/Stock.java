@@ -1,5 +1,6 @@
 package com.inventory.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -13,6 +14,11 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * Domain class which stores attributes related to stock
+ * @author chitesh
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Entity
 public class Stock {
@@ -34,15 +40,16 @@ public class Stock {
 
 	//@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "UTC")
-	private Date entryDate;
+	private LocalDate entryDate;
 	
 	private String entryBy;
 
 	@JsonFormat
-	private Date lastUpdateDate;
+	private LocalDate lastUpdateDate;
 
 	private String updatedBy;
 
+	@NotNull(message  ="Per day cost of stock can not be empty.")
 	private Integer amountPerDay;
 	
 	private Boolean orderAdditionalStock;
@@ -78,11 +85,11 @@ public class Stock {
 
 		
 
-	public Date getEntryDate() {
+	public LocalDate getEntryDate() {
 		return entryDate;
 	}
 
-	public void setEntryDate(Date entryDate) {
+	public void setEntryDate(LocalDate entryDate) {
 		this.entryDate = entryDate;
 	}
 
@@ -94,11 +101,11 @@ public class Stock {
 		this.entryBy = entryBy;
 	}
 
-	public Date getLastUpdateDate() {
+	public LocalDate getLastUpdateDate() {
 		return lastUpdateDate;
 	}
 
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(LocalDate lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
@@ -115,6 +122,7 @@ public class Stock {
 	}
 
 	public void setActivatePromotion(Boolean activatePromotion) {
+		
 		this.activatePromotion = activatePromotion;
 	}
 

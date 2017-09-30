@@ -1,7 +1,7 @@
 package com.inventory.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,7 +14,11 @@ import com.inventory.repository.StockRepository;
 import com.inventory.utils.StockException;
 import com.inventory.utils.StockServiceValidator;
 
-
+/**
+ * Stock Service class used to validate the operate the CRUD operation on the resources
+ * @author chitesh
+ *
+ */
 @Service
 @ComponentScan("com.inventory.*")
 public class StockServices {
@@ -25,28 +29,32 @@ public class StockServices {
 	@Autowired
 	private StockServiceValidator stockValidator;
 	
-	/*@Autowired
-	private BusinessRules businessRules;*/
+	@Autowired
+	private BusinessRules businessRules;
 	
 	
-	public void addItemInInventory(Stock item) {
-		stockRepository.save(item);
-	}
-
 	public List<Stock> getAllStocks() {
 		List<Stock> stocks = new ArrayList<>();
 //		stockRepository.findAll().forEach(stocks::add);
 		
 		Iterator<Stock> it = stockRepository.findAll().iterator();
 		while(it.hasNext()) {
-			Stock stk = it.next();
-			//businessRules.calculateDurationOfStockInDays(stk)
-			
-			System.out.println("Date "+stk.getName());
-			System.out.println("Date "+stk.getEntryDate());
+			Stock stock = it.next();
 			
 			
-			stocks.add(stk);
+			int durationInDays = businessRules.getStockDurationInInventory(stock.getEntryDate());
+			boolean promotionApplicable = businessRules.isPromotionApplicable(durationInDays);
+			boolean additionalStock = businessRules.indicateForAdditionalOrder(stock);
+			int costInInventory = businessRules.calculateInventoryCost(durationInDays , stock.getAmountPerDay());
+			
+			stock.setDaysInInventory(durationInDays);
+			stock.setActivatePromotion(promotionApplicable);
+			stock.setOrderAdditionalStock(additionalStock);
+			stock.setInventoryCost(costInInventory);
+			
+			
+			
+			stocks.add(stock);
 		}
 		
 		
@@ -54,24 +62,26 @@ public class StockServices {
 	}
 	
 	
+	public Stock getSelectedItem(final int id) {
+		return stockRepository.findOne(id);
+	}
+	
+	
 	public int addStock(Stock stock) {
-		stock.setEntryDate(new Date());
+//		stock.setEntryDate(LocalDate.now());
 		Stock stk = stockRepository.save(stock);
-		System.out.println("ID after saving: "+stk.getEntryDate());
 		return stk.getId();
 	}
 	
 	
-	public void updateStock(int id, Stock stock) throws StockException {
+	public void updateStock(final int id, Stock stock) throws StockException {
 		
-		System.out.println("stock "+stock.getName());
-		
-		Stock availableStock = stockRepository.findOne(id);
+		Stock availableStock = getSelectedItem(id);
 		
 		stockValidator.validateForUpdate(availableStock, stock);
 		
 		availableStock.setId(id);
-		availableStock.setLastUpdateDate(new Date());
+		availableStock.setLastUpdateDate(LocalDate.now());
 		stockRepository.save(stock);
 		
 	}

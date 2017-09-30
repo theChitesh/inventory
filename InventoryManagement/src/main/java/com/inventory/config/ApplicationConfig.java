@@ -15,6 +15,11 @@ import org.springframework.context.annotation.Primary;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+/**
+ * Application Config class which register modules for Application
+ * @author chitesh
+ *
+ */
 @Configuration
 public class ApplicationConfig {
 
