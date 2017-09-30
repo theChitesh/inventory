@@ -63,6 +63,8 @@ public class StockServices {
 	
 	
 	public Stock getSelectedItem(final int id) {
+		
+		System.out.println("in selected one");
 		return stockRepository.findOne(id);
 	}
 	
@@ -80,8 +82,8 @@ public class StockServices {
 		
 		stockValidator.validateForUpdate(availableStock, stock);
 		
-		availableStock.setId(id);
-		availableStock.setLastUpdateDate(LocalDate.now());
+//		availableStock.setId(id);
+//		availableStock.setLastUpdateDate(LocalDate.now());
 		stockRepository.save(stock);
 		
 	}

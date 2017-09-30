@@ -1,4 +1,4 @@
-package com.inventory.services;
+/*package com.inventory.services;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -18,3 +18,4 @@ public class SockValidator implements Validator{
 	}
 
 }
+*/

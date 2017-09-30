@@ -13,6 +13,7 @@ import com.inventory.utils.StockServiceValidator;
 import org.apache.derby.iapi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,18 +32,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/stocks")
 public class InventoryManagementResource {
 
-	private final StockServices stockServices;
-	private final StockServiceValidator serviceValidator;
-
 	@Autowired
+	private StockServices stockServices;
+	
+	@Autowired
+	private StockServiceValidator serviceValidator;
+
+/*	@Autowired
 	public InventoryManagementResource(final StockServices stockServices,
 			final StockServiceValidator serviceValidator) {
 		this.stockServices = stockServices;
 		this.serviceValidator = serviceValidator;
 	}
-
+*/
 	
 	@GetMapping
+	@PreAuthorize("hasRole('sys-admin')")
 	public List<Stock> getAllItems() {
 		return stockServices.getAllStocks();
 	}
@@ -71,9 +76,11 @@ public class InventoryManagementResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}")
-	public ResponseEntity updateStock(@PathVariable("id") final String id, @RequestBody final Stock stock) {
+	public ResponseEntity updateStock(@PathVariable("id") final String id, @RequestBody final Stock stock) throws StockException{
 		
-		stockServices.updateStock(Integer.parseInt(id), stock);
+		int parsedId = serviceValidator.validateId(id);
+		serviceValidator.validateIdinParamAndPayload(parsedId, stock);
+		stockServices.updateStock(parsedId, stock);
 		return ResponseEntity.noContent().build();
 	}
 
