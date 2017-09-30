@@ -29,9 +29,3 @@ my-env-config.yml
 
 **/Dockerfile
 
-**/.idea
-**./.setting
-**/.classpath
-**/.gitignore.swp
-**/.project
-**/InventoryManagement.iml

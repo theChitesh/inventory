@@ -9,8 +9,6 @@ import com.inventory.services.Message;
 import com.inventory.services.StockServices;
 import com.inventory.utils.StockException;
 import com.inventory.utils.StockServiceValidator;
-
-import org.apache.derby.iapi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,6 +57,7 @@ public class InventoryManagementResource {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('sys-admin')")
 	public ResponseEntity addStock(@RequestBody @Valid Stock stock) {
 		
 		Message messages = new Message();
@@ -71,6 +70,7 @@ public class InventoryManagementResource {
 	}
 
 	@GetMapping("/exp")
+	@PreAuthorize("hasRole('user')")
 	public ResponseEntity expHandling() {
 		throw new StockException("Error accured");
 	}
