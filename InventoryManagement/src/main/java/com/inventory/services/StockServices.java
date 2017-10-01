@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.inventory.domain.Stock;
@@ -32,17 +33,23 @@ public class StockServices {
 	@Autowired
 	private BusinessRules businessRules;
 	
-	
+	/**
+	 * Method helps in retrieving all 
+	 * @return
+	 */
 	public List<Stock> getAllStocks() {
 		List<Stock> stocks = new ArrayList<>();
 //		stockRepository.findAll().forEach(stocks::add);
 		
 		Iterator<Stock> it = stockRepository.findAll().iterator();
 		while(it.hasNext()) {
-			Stock stock = it.next();
+//			Stock stock = it.next();
+			
+			Stock stock = businessRules.enrichStockParameters(it.next());
 			
 			
-			int durationInDays = businessRules.getStockDurationInInventory(stock.getEntryDate());
+			
+			/*int durationInDays = businessRules.getStockDurationInInventory(stock.getEntryDate());
 			boolean promotionApplicable = businessRules.isPromotionApplicable(durationInDays);
 			boolean additionalStock = businessRules.indicateForAdditionalOrder(stock);
 			int costInInventory = businessRules.calculateInventoryCost(durationInDays , stock.getAmountPerDay());
@@ -51,7 +58,7 @@ public class StockServices {
 			stock.setActivatePromotion(promotionApplicable);
 			stock.setOrderAdditionalStock(additionalStock);
 			stock.setInventoryCost(costInInventory);
-			
+			*/
 			
 			
 			stocks.add(stock);
@@ -63,15 +70,19 @@ public class StockServices {
 	
 	
 	public Stock getSelectedItem(final int id) {
-		
-		System.out.println("in selected one");
 		return stockRepository.findOne(id);
 	}
 	
 	
 	public int addStock(Stock stock) {
-//		stock.setEntryDate(LocalDate.now());
-		Stock stk = stockRepository.save(stock);
+
+		Stock stk = null;
+		try {
+			stk = stockRepository.save(stock);
+		} catch (DataIntegrityViolationException dexception) {
+
+			throw new StockException("Stock with the same name is already present");
+		}
 		return stk.getId();
 	}
 	
@@ -81,9 +92,7 @@ public class StockServices {
 		Stock availableStock = getSelectedItem(id);
 		
 		stockValidator.validateForUpdate(availableStock, stock);
-		
-//		availableStock.setId(id);
-//		availableStock.setLastUpdateDate(LocalDate.now());
+		stock.setLastUpdateDate(LocalDate.now());
 		stockRepository.save(stock);
 		
 	}

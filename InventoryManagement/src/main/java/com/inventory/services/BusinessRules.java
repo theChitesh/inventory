@@ -17,10 +17,25 @@ import com.inventory.utils.Constants;
 public class BusinessRules {
 
 	
+	public Stock enrichStockParameters(Stock stock) {
+		
+		int durationInDays = getStockDurationInInventory(stock.getEntryDate());
+		boolean promotionApplicable = isPromotionApplicable(durationInDays);
+		boolean additionalStock = indicateForAdditionalOrder(stock);
+		int costInInventory = calculateInventoryCost(durationInDays , stock.getAmountPerDay());
+		
+		stock.setDaysInInventory(durationInDays);
+		stock.setActivatePromotion(promotionApplicable);
+		stock.setOrderAdditionalStock(additionalStock);
+		stock.setInventoryCost(costInInventory);
+		
+		
+		
+		return stock;
+	}
 	
 	
-	
-	public int getStockDurationInInventory(LocalDate entryDate) {
+	private int getStockDurationInInventory(LocalDate entryDate) {
 
 		LocalDate today = LocalDate.now();
 		Period interval = Period.between(entryDate, today);
@@ -28,7 +43,7 @@ public class BusinessRules {
 	}
 	
 	
-	public boolean  isPromotionApplicable(int duration) {
+	private boolean  isPromotionApplicable(int duration) {
 		
 		if(duration >= Constants.ACTIVATE_PROMOTION_AFTER_TEN_DAYS) {
 			return true;
@@ -38,7 +53,7 @@ public class BusinessRules {
 	}
 	
 	
-	public boolean indicateForAdditionalOrder(Stock stock) {
+	private boolean indicateForAdditionalOrder(Stock stock) {
 		
 		if(Constants.STOCK_LESS_THAN_HUNDRED_UNITS > stock.getQuantity()) {
 			return true;
@@ -47,7 +62,7 @@ public class BusinessRules {
 	}
 	
 	
-	public int calculateInventoryCost(final int amountPerday, final int duration ) {
+	private int calculateInventoryCost(final int amountPerday, final int duration ) {
 		int cost = amountPerday * duration;
 		return cost;
 	}

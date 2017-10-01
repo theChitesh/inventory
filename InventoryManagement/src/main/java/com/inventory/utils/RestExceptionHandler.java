@@ -19,9 +19,7 @@ public class RestExceptionHandler {
 
   @ExceptionHandler(Throwable.class)
   @ResponseBody
-  public ResponseEntity<String> handleAccessDeniedException(
-      final Throwable e
-  ) {
+  public ResponseEntity<String> handleAccessDeniedException(final Throwable e) {
     // TODO : have a error dto to return more details for failure
     LOGGER.info("Internal error accured", e);
     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -29,34 +27,30 @@ public class RestExceptionHandler {
 
   @ExceptionHandler(AccessDeniedException.class)
   @ResponseBody
-  public ResponseEntity<String> handleAccessDeniedException(
-      final AccessDeniedException e
-  ) {
+  public ResponseEntity<String> handleAccessDeniedException(final AccessDeniedException e) {
     // TODO : have a error dto to return more details for failure
     LOGGER.info("Access denied", e);
-    return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(StockException.class)
   @ResponseBody
-  public ResponseEntity<String> handleAccessDeniedException(
-      final StockException e
-  ) {
-    LOGGER.info("HTTP 403 Access forbidden", e);
-    return new ResponseEntity<>(e.getErrorMessage(), HttpStatus.FORBIDDEN);
+  public ResponseEntity<String> handleAccessDeniedException(final StockException e) {
+	  
+	 LOGGER.info("HTTP 400 Bad Request", e);
+    return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseBody
-  public ResponseEntity<String> handleAccessDeniedException(
-      final MethodArgumentNotValidException e
-  ) {
+  public ResponseEntity<String> handleAccessDeniedException(final MethodArgumentNotValidException e) {
+
     final String details = e.getBindingResult()
         .getFieldErrors()
         .stream()
         .map(x -> x.getDefaultMessage() + " : " + x.getRejectedValue())
         .collect(Collectors.joining("; "));
-    LOGGER.info("HTTP 403 Access forbidden", e);
+    LOGGER.info("HTTP 400 Bad Request", e);
     return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
   }
 }

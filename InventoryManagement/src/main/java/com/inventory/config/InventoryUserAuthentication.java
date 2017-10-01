@@ -34,7 +34,7 @@ public class InventoryUserAuthentication implements Authentication {
 
   @Override
   public String getName() {
-    return null;
+    return this.inventoryUser.getUsername();
   }
 
   @Override
@@ -54,7 +54,7 @@ public class InventoryUserAuthentication implements Authentication {
 
   @Override
   public Object getPrincipal() {
-    return null;
+    return this.inventoryUser;
   }
 
   @Override

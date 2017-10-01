@@ -1,11 +1,13 @@
 package com.inventory.utils;
 
+import org.springframework.aop.ThrowsAdvice;
+
 /**
  * Exception Class needed for handling application exception
  * @author chitesh
  *
  */
-public class StockException extends RuntimeException {
+public class StockException extends RuntimeException implements ThrowsAdvice{
 
   public StockException(final String errorMessage) {
     super(errorMessage);

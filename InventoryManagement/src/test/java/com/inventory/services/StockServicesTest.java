@@ -46,7 +46,7 @@ public class StockServicesTest {
 		Stock toSave = new Stock();
 		
 		Mockito.when(stockRepository.save(toSave)).thenReturn(stock);
-		int id = stockServices.addStock(toSave);
+		Integer id = stockServices.addStock(toSave);
 		Assert.assertEquals(id, stock.getId());
 
 	}
@@ -70,9 +70,9 @@ public class StockServicesTest {
 		stocks.add(stock1); stocks.add(stock2);
 		
 		Mockito.when(stockRepository.findAll()).thenReturn(stocks);
-		Mockito.when(businessRules.getStockDurationInInventory(LocalDate.now())).thenReturn(1);
-		Mockito.when(businessRules.getStockDurationInInventory(LocalDate.now())).thenReturn(1);
-		Mockito.when(businessRules.calculateInventoryCost(1, 1)).thenReturn(1);
+		//Mockito.when(businessRules.getStockDurationInInventory(LocalDate.now())).thenReturn(1);
+		//Mockito.when(businessRules.getStockDurationInInventory(LocalDate.now())).thenReturn(1);
+		//Mockito.when(businessRules.calculateInventoryCost(1, 1)).thenReturn(1);
 		
 		
 		List<Stock> outputStock = stockServices.getAllStocks();

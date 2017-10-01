@@ -2,17 +2,12 @@ package com.inventory.resources;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.inventory.domain.Stock;
-import com.inventory.services.Message;
-import com.inventory.services.StockServices;
-import com.inventory.utils.StockException;
-import com.inventory.utils.StockServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inventory.domain.Stock;
+import com.inventory.services.Result;
+import com.inventory.services.StockServices;
+import com.inventory.utils.StockException;
+import com.inventory.utils.StockServiceValidator;
+
 /**
- * Rest resource class to deal which handles the REST operation on the stock resource
+ * Rest resource class to deal with the REST operation on the stock resource.
+ * This class will respond to the request with valid Authorization JWT token.
+ * Two roles are defined to access the resource. 
+ * 1) Admin Role : "sys-admin"
+ * 2) User Role  : "user"
  * @author chitesh
  *
  */
@@ -30,56 +35,81 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/stocks")
 public class InventoryManagementResource {
 
-	@Autowired
-	private StockServices stockServices;
-	
-	@Autowired
-	private StockServiceValidator serviceValidator;
 
-/*	@Autowired
+	private final StockServices stockServices;
+	
+
+	private final StockServiceValidator serviceValidator;
+
+	@Autowired
 	public InventoryManagementResource(final StockServices stockServices,
 			final StockServiceValidator serviceValidator) {
 		this.stockServices = stockServices;
 		this.serviceValidator = serviceValidator;
 	}
-*/
 	
+	/**
+	 * Method will return the list of stocks available in Inventory.
+	 * @return
+	 */
 	@GetMapping
-	@PreAuthorize("hasRole('sys-admin')")
+	@PreAuthorize("hasRole('user') or hasRole('sys-admin')")
 	public List<Stock> getAllItems() {
 		return stockServices.getAllStocks();
 	}
 	
+	/**
+	 * Method will return the details of particular stock, for which the request is made.
+	 * @param id - Id of the stock.
+	 * @return Stock details
+	 */
+	@PreAuthorize("hasRole('user') or hasRole('sys-admin')")
 	@RequestMapping(method = RequestMethod.GET , value = "/{id}")
 	public Stock getSelectedItems(@PathVariable("id") final String id) {
-		System.out.println("inside get");
-		return stockServices.getSelectedItem(Integer.parseInt(id));
+
+		int parsedId = serviceValidator.validateId(id);
+		return stockServices.getSelectedItem(parsedId);
 	}
 
+	/**
+	 * Method helps in adding a new resource to the inventory.
+	 * Only user with sys-admin role can perform this operation.
+	 * 
+	 * @param stock - stock details to be added
+	 * @return - stock id.
+	 */
 	@PostMapping
 	@PreAuthorize("hasRole('sys-admin')")
-	public ResponseEntity addStock(@RequestBody @Valid Stock stock) {
+	public ResponseEntity addStock(@RequestBody @Valid Stock stock, HttpServletRequest request) {
 		
-		Message messages = new Message();
+		String userName = request.getUserPrincipal().getName();
+		stock.setEntryBy(userName);
+		Result result = new Result();
 		int id = stockServices.addStock(stock);
-		Stock stk = new Stock();
-		stk.setId(id);
-		messages.setResult(new Integer(stk.getId()));
-		
-		return ResponseEntity.ok(messages);
+		result.setId(id);
+		return ResponseEntity.ok(result);
 	}
 
-	@GetMapping("/exp")
-	@PreAuthorize("hasRole('user')")
-	public ResponseEntity expHandling() {
-		throw new StockException("Error accured");
-	}
-
+	/**
+	 * Method is used to update the details of a particular stock.
+	 * @param id - ID, of the stock to be updated.
+	 * @param stock - stock details which needs to be updated.
+	 * @return - no-content.
+	 * @throws StockException
+	 */
+	@PreAuthorize("hasRole('sys-admin')")
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}")
-	public ResponseEntity updateStock(@PathVariable("id") final String id, @RequestBody final Stock stock) throws StockException{
+	public ResponseEntity updateStock(@PathVariable("id") final String id, @RequestBody Stock stock,
+			HttpServletRequest request) throws StockException {
 		
 		int parsedId = serviceValidator.validateId(id);
 		serviceValidator.validateIdinParamAndPayload(parsedId, stock);
+		
+		
+		
+		String userName = request.getUserPrincipal().getName();
+		stock.setUpdatedBy(userName);
+		
 		stockServices.updateStock(parsedId, stock);
 		return ResponseEntity.noContent().build();
 	}

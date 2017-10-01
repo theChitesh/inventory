@@ -59,8 +59,6 @@ public class SecurityConfiguration {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
     	
-    	System.out.println("first hit");
-    	
       // disable caching
       http.headers().cacheControl();
 

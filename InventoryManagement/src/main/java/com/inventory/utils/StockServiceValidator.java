@@ -1,5 +1,7 @@
 package com.inventory.utils;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +34,17 @@ public class StockServiceValidator {
 	
 	
 	public void validateIdinParamAndPayload(int id , Stock stock) throws StockException{
+		System.out.println("stock id "+stock.getId());
+		if((null != stock.getId()) && (id != stock.getId())) {
+			throw new StockException("Request body has a different ID than ID present in rquest URL.");
+		}
+	}
+	
+	public void checkIfStockIsPresent(List<Stock> stocks , Stock newStock) {
 		
-		if(id != stock.getId()) {
-			throw new StockException("ID in the request and payload can not be different");
+		boolean flag = stocks.stream().anyMatch(stock -> stock.getName().equals(newStock.getName()));
+		if(flag) {
+			throw new StockException("Stock with same name is already pesent.");
 		}
 	}
 	

@@ -3,6 +3,7 @@ package com.inventory.domain;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,20 +26,19 @@ public class Stock {
 
 	@Id	
 	@GeneratedValue
-	private int id;
+	private Integer id;
 
 	@NotBlank(message = "stock name can not be empty!")
+	@Column(unique=true)
 	private String name;
 	
 	
 	@NotNull(message  ="quantity can not be null")
-	@Min(value = 1)
 	private Integer quantity;
 
 
 	private Boolean activatePromotion;
 
-	//@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "UTC")
 	private LocalDate entryDate;
 	
@@ -59,11 +59,11 @@ public class Stock {
 	private Integer inventoryCost;
 	
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
