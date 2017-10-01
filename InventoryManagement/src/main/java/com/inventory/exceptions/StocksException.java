@@ -1,5 +1,6 @@
-package com.inventory.exceptions;
+/*package com.inventory.exceptions;
 
 public class StocksException {
 
 }
+*/

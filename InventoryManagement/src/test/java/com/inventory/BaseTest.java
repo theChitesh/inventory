@@ -98,33 +98,13 @@ public class BaseTest extends AbstractJUnit4SpringContextTests {
     );
   }
 
-  /**
-   * For Delete operation
-   * @param uri
-   * @param headers
-   * @param uriParams
-   * @return
-   * @throws Exception
-   */
-  private ResultActions performDeleteOperation(final String uri,
-                                               final HttpHeaders headers,
-                                               final String... uriParams) throws Exception {
-    return mockMvc.perform(
-        delete(uri, (Object[]) uriParams)
-            .headers(headers)
-    );
-  }
+ 
 
   protected <T> T extractDtoFromMockResult(final MvcResult mvcResult, final Class<T> clazz) throws IOException {
     String responseBody = mvcResult.getResponse().getContentAsString();
     return objectMapper.readValue(responseBody, clazz);
   }
   
-  
-  /*protected <T> T extractIDFromMockResult(final MvcResult mvcResult, final Class<T> clazz) throws IOException {
-	    String responseBody = mvcResult.getResponse().getContentAsString();
-	    return objectMapper.readValue(responseBody, clazz);
-	  }*/
   
   protected ResultActions getAllStocks(final String token) throws Exception {
 	    return performGetOperation(STOCKS_URI, headersWithToken(token));
