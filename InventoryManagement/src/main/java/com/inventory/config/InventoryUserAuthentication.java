@@ -6,6 +6,11 @@ import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * Inventory User Authentication class helps in setting the context for authenticated users.
+ * @author chitesh
+ *
+ */
 public class InventoryUserAuthentication implements Authentication {
 
   private final InventoryUser inventoryUser;
@@ -29,7 +34,6 @@ public class InventoryUserAuthentication implements Authentication {
 
   @Override
   public String getName() {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -40,25 +44,21 @@ public class InventoryUserAuthentication implements Authentication {
 
   @Override
   public Object getCredentials() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public Object getDetails() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public Object getPrincipal() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public boolean isAuthenticated() {
-    System.out.println("in isAUthenticated");
     return authenticated;
   }
 

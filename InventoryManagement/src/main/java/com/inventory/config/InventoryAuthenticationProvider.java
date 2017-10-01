@@ -13,12 +13,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Authentication Provider implementation for Inventory Management application. Class helps 
+ * verification of Authorization JWT token.
+ * 
+ * @author chitesh
+ *
+ */
 @Component
 public class InventoryAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    System.out.println("in authenticate method");
     InventoryUserAuthentication auth = (InventoryUserAuthentication) authentication;
     verifyTokenSignature(auth.getJwt());
     authentication.setAuthenticated(true);
@@ -27,10 +33,13 @@ public class InventoryAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public boolean supports(Class<?> arg0) {
-    System.out.println("in support ");
     return true;
   }
 
+  /**
+   * Method validates the JWT token signature
+   * @param jwt
+   */
   private void verifyTokenSignature(final SignedJWT jwt) {
     final String kidFromToken = jwt.getHeader().getKeyID();
     final Optional<PublicKey> publicKey = AuthorizationKey.getPublicKey(kidFromToken);

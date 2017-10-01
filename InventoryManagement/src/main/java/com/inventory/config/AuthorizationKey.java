@@ -17,7 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import static java.util.stream.Collectors.joining;
 
-
+/**
+ * Authorization class helps in retrieving the stored public key for token verification.
+ * @author chitesh
+ *
+ */
 public class AuthorizationKey {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationKey.class);
 
@@ -30,10 +34,15 @@ public class AuthorizationKey {
         toPublicKey("ODcxOTBCOUVGOTUxODJDNjkyOUFGQzVGRUU5M0FFOEMyODE2MjgxOA").get());
   }
 
+  /**
+   * Methods returns the public of the certificate used.
+   * @param keyId
+   * @return
+   */
   private static Optional<PublicKey> toPublicKey(final String keyId) {
 
     final String certificateString =
-        new BufferedReader(new InputStreamReader(AuthorizationKey.class.getClassLoader().getResourceAsStream("rsa_public.crt")))
+        new BufferedReader(new InputStreamReader(AuthorizationKey.class.getClassLoader().getResourceAsStream("inventory_public.crt")))
             .lines().collect(joining(System.getProperty("line.separator")));
     final String certificateCore = certificateString
         .replace(CERTIFICATE_BEGIN_STRING, "")

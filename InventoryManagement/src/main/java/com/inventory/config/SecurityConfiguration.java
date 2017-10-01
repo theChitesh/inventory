@@ -38,6 +38,7 @@ public class SecurityConfiguration {
 
   @Configuration
   public class ManagementApiSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	  
     private final InventoryFilter inventoryFilter;
 
     @Inject
@@ -57,6 +58,9 @@ public class SecurityConfiguration {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+    	
+    	System.out.println("first hit");
+    	
       // disable caching
       http.headers().cacheControl();
 

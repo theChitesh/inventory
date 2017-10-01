@@ -27,6 +27,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+/**
+ * Filter class intercepts the Servlet request to retrieve the token information.
+ * Further sets the security context with authenticated user information.
+ * @author chitesh
+ *
+ */
 @Component
 public class InventoryFilter extends GenericFilterBean {
 
@@ -44,7 +50,7 @@ public class InventoryFilter extends GenericFilterBean {
       final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
       String stringToken = httpServletRequest.getHeader("Authorization");
       if(null == stringToken) {
-    	  dispatchResponse(response, HttpStatus.UNAUTHORIZED.value(), new RuntimeException("Invalid toke"));
+    	  dispatchResponse(response, HttpStatus.UNAUTHORIZED.value(), new RuntimeException("Invalid token"));
     	  return;
       }
       final InventoryUserAuthentication token= getTokenDetails(stringToken);
@@ -55,11 +61,11 @@ public class InventoryFilter extends GenericFilterBean {
       chain.doFilter(request, response);
 
     } catch (ParseException | IOException | ServletException e) {
-      e.printStackTrace();
+    	logger.error(e);
       try {
         dispatchResponse(response, HttpStatus.UNAUTHORIZED.value(), e);
       } catch (IOException e1) {
-        e1.printStackTrace();
+    	  logger.error(e1);
       }
     } finally {
       SecurityContextHolder.clearContext();
@@ -69,6 +75,7 @@ public class InventoryFilter extends GenericFilterBean {
   private InventoryUserAuthentication getTokenDetails(final String token) throws ParseException {
     final JWT jwt = JWTParser.parse(token);
     final JWTClaimsSet jwtClaimsSet = jwt.getJWTClaimsSet();
+    
     final String role = "ROLE_" + jwtClaimsSet.getStringClaim("role");
     final String username = jwtClaimsSet.getStringClaim("username");
     final String userid = jwtClaimsSet.getStringClaim("userid");
