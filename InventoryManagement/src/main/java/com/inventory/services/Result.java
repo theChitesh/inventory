@@ -2,15 +2,19 @@ package com.inventory.services;
 
 public class Result {
 
-	private Object id;
+	private Integer id;
 
-	public Object getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Object id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
+	
+	
+	
+	
 	
 }

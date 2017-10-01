@@ -43,28 +43,9 @@ public class StockServices {
 		
 		Iterator<Stock> it = stockRepository.findAll().iterator();
 		while(it.hasNext()) {
-//			Stock stock = it.next();
-			
 			Stock stock = businessRules.enrichStockParameters(it.next());
-			
-			
-			
-			/*int durationInDays = businessRules.getStockDurationInInventory(stock.getEntryDate());
-			boolean promotionApplicable = businessRules.isPromotionApplicable(durationInDays);
-			boolean additionalStock = businessRules.indicateForAdditionalOrder(stock);
-			int costInInventory = businessRules.calculateInventoryCost(durationInDays , stock.getAmountPerDay());
-			
-			stock.setDaysInInventory(durationInDays);
-			stock.setActivatePromotion(promotionApplicable);
-			stock.setOrderAdditionalStock(additionalStock);
-			stock.setInventoryCost(costInInventory);
-			*/
-			
-			
 			stocks.add(stock);
 		}
-		
-		
 		return stocks;
 	}
 	
@@ -78,6 +59,8 @@ public class StockServices {
 
 		Stock stk = null;
 		try {
+			stock.setLastUpdateDate(null);
+			stock.setUpdatedBy(null);
 			stk = stockRepository.save(stock);
 		} catch (DataIntegrityViolationException dexception) {
 

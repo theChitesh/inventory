@@ -70,10 +70,6 @@ public class StockServicesTest {
 		stocks.add(stock1); stocks.add(stock2);
 		
 		Mockito.when(stockRepository.findAll()).thenReturn(stocks);
-		//Mockito.when(businessRules.getStockDurationInInventory(LocalDate.now())).thenReturn(1);
-		//Mockito.when(businessRules.getStockDurationInInventory(LocalDate.now())).thenReturn(1);
-		//Mockito.when(businessRules.calculateInventoryCost(1, 1)).thenReturn(1);
-		
 		
 		List<Stock> outputStock = stockServices.getAllStocks();
 		Assert.assertNotNull(outputStock);
@@ -104,13 +100,15 @@ public class StockServicesTest {
 		newStock.setId(1);
 		newStock.setName("Second");
 		
+		try {
 		Mockito.when(stockRepository.findOne(1)).thenReturn(stock);
-//		Mockito.doNothing().when(stockValidator).validateForUpdate(stock, newStock);
-		
 		Mockito.doThrow(new StockException("sfssdfsfsd")).when(stockValidator).validateForUpdate(stock, newStock);
 		
 		stockServices.updateStock(1, stock);
-		
+		}catch(StockException excption) {
+			System.out.println("in catch");
+			
+		}
 		
 	}
 	

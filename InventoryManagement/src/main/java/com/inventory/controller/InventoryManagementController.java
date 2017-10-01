@@ -1,4 +1,4 @@
-package com.inventory.resources;
+package com.inventory.controller;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ import com.inventory.utils.StockServiceValidator;
  */
 @RestController
 @RequestMapping("/stocks")
-public class InventoryManagementResource {
+public class InventoryManagementController {
 
 
 	private final StockServices stockServices;
@@ -42,7 +43,7 @@ public class InventoryManagementResource {
 	private final StockServiceValidator serviceValidator;
 
 	@Autowired
-	public InventoryManagementResource(final StockServices stockServices,
+	public InventoryManagementController(final StockServices stockServices,
 			final StockServiceValidator serviceValidator) {
 		this.stockServices = stockServices;
 		this.serviceValidator = serviceValidator;
@@ -87,7 +88,7 @@ public class InventoryManagementResource {
 		Result result = new Result();
 		int id = stockServices.addStock(stock);
 		result.setId(id);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.status(HttpStatus.CREATED).body(result);
 	}
 
 	/**
