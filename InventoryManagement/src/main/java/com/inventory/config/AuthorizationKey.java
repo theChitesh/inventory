@@ -17,10 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import static java.util.stream.Collectors.joining;
 
+
 public class AuthorizationKey {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationKey.class);
 
-  private static final String CERTIFICATE_BEGIN_STRING = "-----BEGIN CERTIFICATE-----\n";
+  private static final String CERTIFICATE_BEGIN_STRING = "-----BEGIN CERTIFICATE-----"+System.getProperty("line.separator");
   private static final String CERTIFICATE_END_STRING = "-----END CERTIFICATE-----";
   private static final Map<String, PublicKey> publicKeyMap = new HashMap<>();
 
@@ -41,8 +42,10 @@ public class AuthorizationKey {
     try {
       final byte[] certificateBytes = Base64.getMimeDecoder().decode(certificateCore);
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+      
       final X509Certificate x509Certificate =
           (X509Certificate) factory.generateCertificate(new ByteArrayInputStream(certificateBytes));
+      
       if (x509Certificate == null) {
         LOGGER.warn("Auth public key with id '{}' cannot be stored/updated! Could not generate certificate out of '{}'",
             keyId, certificateString);

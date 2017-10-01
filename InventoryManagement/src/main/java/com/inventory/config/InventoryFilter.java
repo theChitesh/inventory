@@ -16,6 +16,8 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,10 +42,13 @@ public class InventoryFilter extends GenericFilterBean {
 
     try {
       final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-
-      final InventoryUserAuthentication token;
-      token = getTokenDetails(httpServletRequest.getHeader("Authorization"));
-
+      String stringToken = httpServletRequest.getHeader("Authorization");
+      if(null == stringToken) {
+    	  dispatchResponse(response, HttpStatus.UNAUTHORIZED.value(), new RuntimeException("Invalid toke"));
+    	  return;
+      }
+      final InventoryUserAuthentication token= getTokenDetails(stringToken);
+      
       final Authentication auth =
           authenticationManager.authenticate(token);
       SecurityContextHolder.getContext().setAuthentication(auth);
