@@ -19,6 +19,7 @@ The application works with two assumption.
 
 2) Oder additonal stock advise is set, when the qunatity of stock in Inventory is less than 100 Units.
 
+Request URLs:-
 GET/POST :- http://localhost:9191/inventory/stocks
 
 Stock Resource
