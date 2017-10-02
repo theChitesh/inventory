@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.domain.Stock;
+import com.inventory.exceptions.StockException;
 import com.inventory.services.Result;
 import com.inventory.services.StockServices;
-import com.inventory.utils.StockException;
 import com.inventory.utils.StockServiceValidator;
 
 /**

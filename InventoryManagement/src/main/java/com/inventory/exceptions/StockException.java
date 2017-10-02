@@ -1,4 +1,4 @@
-package com.inventory.utils;
+package com.inventory.exceptions;
 
 import org.springframework.aop.ThrowsAdvice;
 

@@ -1,4 +1,4 @@
-package com.inventory.utils;
+package com.inventory.exceptions;
 
 import java.util.stream.Collectors;
 

@@ -1,11 +1,10 @@
 package com.inventory.utils;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.inventory.domain.Stock;
+import com.inventory.exceptions.StockException;
 
 /**
  * Class used to validate the request data for further processing. 
@@ -32,23 +31,38 @@ public class StockServiceValidator {
 		return parsedId;
 	}
 	
-	
+	/**
+	 * Method helps in validating the ID present in Path Param with the ID attached to the resource body.
+	 * @param id - ID present in the path param
+	 * @param stock - Stock details
+	 * @throws StockException
+	 */
 	public void validateIdinParamAndPayload(int id , Stock stock) throws StockException{
-		System.out.println("stock id "+stock.getId());
+	
 		if((null != stock.getId()) && (id != stock.getId())) {
 			throw new StockException("Request body has a different ID than ID present in rquest URL.");
 		}
 	}
 	
-	public void checkIfStockIsPresent(List<Stock> stocks , Stock newStock) {
+	/**
+	 * Method is used to if the stock with the same name is present in database or not.
+	 * @param stocks
+	 * @param newStock
+	 */
+	/*public void checkIfStockIsPresent(List<Stock> stocks , Stock newStock) {
 		
 		boolean flag = stocks.stream().anyMatch(stock -> stock.getName().equals(newStock.getName()));
 		if(flag) {
-			throw new StockException("Stock with same name is already pesent.");
+			throw new StockException("Stock with same name is already present.");
 		}
-	}
+	}*/
 	
-	
+	/**
+	 * Method used to validate the resource before updating in database.
+	 * @param availableStock - the available stock in database.
+	 * @param newStock - stock with updated attributes
+	 * @throws StockException
+	 */
 	public void validateForUpdate(Stock availableStock , Stock newStock) throws StockException {
 		
 		if(null == availableStock) {

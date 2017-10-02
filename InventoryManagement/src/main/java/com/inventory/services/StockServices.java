@@ -11,8 +11,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.inventory.domain.Stock;
+import com.inventory.exceptions.StockException;
 import com.inventory.repository.StockRepository;
-import com.inventory.utils.StockException;
 import com.inventory.utils.StockServiceValidator;
 
 /**
@@ -49,12 +49,20 @@ public class StockServices {
 		return stocks;
 	}
 	
-	
+	/**
+	 * Method helps in fetching the selected resource.
+	 * @param id - ID of the Resource
+	 * @return - Stock DTO
+	 */
 	public Stock getSelectedItem(final int id) {
 		return stockRepository.findOne(id);
 	}
 	
-	
+	/**
+	 * Method helps in saving the stock in database.
+	 * @param stock - 
+	 * @return
+	 */
 	public int addStock(Stock stock) {
 
 		Stock stk = null;
@@ -69,7 +77,12 @@ public class StockServices {
 		return stk.getId();
 	}
 	
-	
+	/**
+	 * Method helps in updating the exisiting stock in database.
+	 * @param id - Id of the Stock to be updated.
+	 * @param stock - Stock details.
+	 * @throws StockException 
+	 */
 	public void updateStock(final int id, Stock stock) throws StockException {
 		
 		Stock availableStock = getSelectedItem(id);

@@ -12,8 +12,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.inventory.domain.Stock;
+import com.inventory.exceptions.StockException;
 import com.inventory.repository.StockRepository;
-import com.inventory.utils.StockException;
 import com.inventory.utils.StockServiceValidator;
 
 @RunWith(MockitoJUnitRunner.class)
